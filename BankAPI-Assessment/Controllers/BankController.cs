@@ -11,13 +11,13 @@ namespace BankAPI_Assessment.Controllers
         {
             private static List<BankAccount> _accounts = new List<BankAccount>
     {
-        new BankAccount { AccountId = "1", AccountName = "Kazeem Dosunmu", Balance = 100m }
+        new BankAccount { AccountNumber = "1234567890", AccountName = "Kazeem Dosunmu", Balance = 100m }
     };
 
             [HttpPost("Deposit")]
-            public IActionResult Deposit(string accountId, decimal amount)
+            public IActionResult Deposit(string accountNumber, decimal amount)
             {
-                var account = _accounts.FirstOrDefault(x => x.AccountId == accountId);
+                var account = _accounts.FirstOrDefault(x => x.AccountNumber == accountNumber);
                 if (account == null) return NotFound("Account not found");
                 if (amount <= 0) return BadRequest("Amount must be greater than zero");
 
@@ -26,9 +26,9 @@ namespace BankAPI_Assessment.Controllers
             }
 
             [HttpPost("Withdraw")]
-            public IActionResult Withdraw(string accountId, decimal amount)
+            public IActionResult Withdraw(string accountNumber, decimal amount)
             {
-                var account = _accounts.FirstOrDefault(x => x.AccountId == accountId);
+                var account = _accounts.FirstOrDefault(x => x.AccountNumber == accountNumber);
                 if (account == null) return NotFound("Account not found");
                 if (amount <= 0) return BadRequest("Amount must be greater than zero");
                 if (account.Balance < amount) return BadRequest("Insufficient funds");
@@ -37,10 +37,10 @@ namespace BankAPI_Assessment.Controllers
                 return Ok($"Withdrawal successful. New balance: {account.Balance}");
             }
 
-            [HttpGet("GetBalance/{accountId}")]
-            public IActionResult GetBalance(string accountId)
+            [HttpGet("GetBalance/{accountNumber}")]
+            public IActionResult GetBalance(string accountNumber)
             {
-                var account = _accounts.FirstOrDefault(x => x.AccountId == accountId);
+                var account = _accounts.FirstOrDefault(x => x.AccountNumber == accountNumber);
                 if (account == null) return NotFound("Account not found");
 
                 return Ok(account.Balance);
